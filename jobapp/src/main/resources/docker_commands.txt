@@ -1,0 +1,19 @@
+//Download postgres image
+docker run -d --name db -e POSTGRES_PASSWORD=root postgres
+
+//Download pg admin image
+docker run -d --name pgadmin -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=root dpage/pgadmin4
+
+//Check the connection between the DB and the pd admin
+docker exec -it pgadmin ping db
+
+docker rm -f db pgadmin
+
+//USING NETWORKS:
+docker network create my-network
+
+docker run -d --name db --network my-network -e POSTGRES_PASSWORD=root postgres
+
+docker run -d --name pgadmin --network my-network -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=root dpage/pgadmin4
+
+docker exec -it pgadmin ping db
