@@ -1,13 +1,15 @@
 package com.mladenov.jobms.job;
 
+import com.mladenov.jobms.job.dto.JobWithCompanyDTO;
+
 import java.util.List;
 
 public interface JobService {
-    List<Job> findAll();
+    List<JobWithCompanyDTO> findAll();
     void createJob(Job job);
-    Job findById(Long id);
+    JobWithCompanyDTO findById(Long id);
 
     boolean deleteJob(Long id);
 
-    Job updateJob(Long id, Job job);
+    JobWithCompanyDTO updateJob(Long id, Job job);
 }
