@@ -2,6 +2,8 @@ package com.mladenov.jobms.job;
 
 import com.mladenov.jobms.job.dto.JobWithCompanyDTO;
 import com.mladenov.jobms.job.external.Company;
+import com.mladenov.jobms.job.mapper.JobMapper;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +27,7 @@ public class JobServiceImpl implements JobService {
         List<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
             Company company = getCompany(job);
-            result.add(new JobWithCompanyDTO(job, company));
+            result.add(JobMapper.getJobWithCompanyDTO(job, company));
         }
 
         return result;
@@ -41,7 +43,7 @@ public class JobServiceImpl implements JobService {
         Job job = jobRepository.findById(id).orElse(null);
         if (job != null){
             Company company = getCompany(job);
-            return new JobWithCompanyDTO(job, company);
+            return JobMapper.getJobWithCompanyDTO(job, company);
         }
 
         return null;
@@ -73,7 +75,7 @@ public class JobServiceImpl implements JobService {
 
         Job saved = jobRepository.save(job1);
         Company company = getCompany(saved);
-        return new JobWithCompanyDTO(saved, company);
+        return JobMapper.getJobWithCompanyDTO(saved, company);
     }
 
     private Company getCompany(Job job) {

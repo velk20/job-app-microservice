@@ -4,20 +4,65 @@ import com.mladenov.jobms.job.Job;
 import com.mladenov.jobms.job.external.Company;
 
 public class JobWithCompanyDTO {
-    private Job job;
+    private Long id;
+    private String title;
+    private String description;
+    private String minSalary;
+    private String maxSalary;
+    private String location;
     private Company company;
 
-    public JobWithCompanyDTO(Job job, Company company) {
-        this.job = job;
-        this.company = company;
+    public Long getId() {
+        return id;
     }
 
-    public Job getJob() {
-        return job;
+    public JobWithCompanyDTO setId(Long id) {
+        this.id = id;
+        return this;
     }
 
-    public JobWithCompanyDTO setJob(Job job) {
-        this.job = job;
+    public String getTitle() {
+        return title;
+    }
+
+    public JobWithCompanyDTO setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public JobWithCompanyDTO setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public String getMinSalary() {
+        return minSalary;
+    }
+
+    public JobWithCompanyDTO setMinSalary(String minSalary) {
+        this.minSalary = minSalary;
+        return this;
+    }
+
+    public String getMaxSalary() {
+        return maxSalary;
+    }
+
+    public JobWithCompanyDTO setMaxSalary(String maxSalary) {
+        this.maxSalary = maxSalary;
+        return this;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public JobWithCompanyDTO setLocation(String location) {
+        this.location = location;
         return this;
     }
 

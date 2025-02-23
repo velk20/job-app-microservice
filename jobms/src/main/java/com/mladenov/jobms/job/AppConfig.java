@@ -8,6 +8,13 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class AppConfig {
 
+    /**
+     * Load Balanced is needed for Eureka Service Regestry
+     * In order to use the rest template with the name of the service
+     * @example: http://COMPANY-SERVICE:8081/companies/"
+     */
+
+    //Example:
     @LoadBalanced
     @Bean
     public RestTemplate restTemplate() {
