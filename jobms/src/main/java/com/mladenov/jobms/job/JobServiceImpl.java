@@ -11,9 +11,11 @@ import java.util.List;
 @Service
 public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
+    private final RestTemplate restTemplate;
 
-    public JobServiceImpl(JobRepository jobRepository) {
+    public JobServiceImpl(JobRepository jobRepository, RestTemplate restTemplate) {
         this.jobRepository = jobRepository;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -74,8 +76,7 @@ public class JobServiceImpl implements JobService {
         return new JobWithCompanyDTO(saved, company);
     }
 
-    private static Company getCompany(Job job) {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject("http://localhost:8081/companies/" + job.getCompanyId(), Company.class);
+    private Company getCompany(Job job) {
+        return restTemplate.getForObject("http://COMPANY-SERVICE:8081/companies/" + job.getCompanyId(), Company.class);
     }
 }
