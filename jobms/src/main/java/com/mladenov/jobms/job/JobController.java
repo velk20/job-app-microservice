@@ -1,6 +1,6 @@
 package com.mladenov.jobms.job;
 
-import com.mladenov.jobms.job.dto.JobWithCompanyDTO;
+import com.mladenov.jobms.job.dto.JobDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +17,8 @@ public class JobController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<JobWithCompanyDTO> getJob(@PathVariable Long id) {
-        JobWithCompanyDTO job = jobService.findById(id);
+    public ResponseEntity<JobDTO> getJob(@PathVariable Long id) {
+        JobDTO job = jobService.findById(id);
         if (job == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -26,7 +26,7 @@ public class JobController {
     }
 
     @GetMapping
-    public ResponseEntity<List<JobWithCompanyDTO>> findAll() {
+    public ResponseEntity<List<JobDTO>> findAll() {
         return new ResponseEntity<>(jobService.findAll(), HttpStatus.OK);
     }
 
@@ -37,8 +37,8 @@ public class JobController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<JobWithCompanyDTO> updateJob(@PathVariable Long id, @RequestBody Job job) {
-        JobWithCompanyDTO job1 = jobService.updateJob(id, job);
+    public ResponseEntity<JobDTO> updateJob(@PathVariable Long id, @RequestBody Job job) {
+        JobDTO job1 = jobService.updateJob(id, job);
         if (job1 == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

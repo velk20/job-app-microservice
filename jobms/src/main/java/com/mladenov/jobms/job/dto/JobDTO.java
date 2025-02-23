@@ -1,9 +1,11 @@
 package com.mladenov.jobms.job.dto;
 
-import com.mladenov.jobms.job.Job;
-import com.mladenov.jobms.job.external.Company;
+import java.util.List;
 
-public class JobWithCompanyDTO {
+import com.mladenov.jobms.job.external.Company;
+import com.mladenov.jobms.job.external.Review;
+
+public class JobDTO {
     private Long id;
     private String title;
     private String description;
@@ -11,12 +13,22 @@ public class JobWithCompanyDTO {
     private String maxSalary;
     private String location;
     private Company company;
+    private List<Review> review;
+
+    public List<Review> getReview() {
+        return review;
+    }
+
+    public JobDTO setReview(List<Review> review) {
+        this.review = review;
+        return this;
+    }
 
     public Long getId() {
         return id;
     }
 
-    public JobWithCompanyDTO setId(Long id) {
+    public JobDTO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -25,7 +37,7 @@ public class JobWithCompanyDTO {
         return title;
     }
 
-    public JobWithCompanyDTO setTitle(String title) {
+    public JobDTO setTitle(String title) {
         this.title = title;
         return this;
     }
@@ -34,7 +46,7 @@ public class JobWithCompanyDTO {
         return description;
     }
 
-    public JobWithCompanyDTO setDescription(String description) {
+    public JobDTO setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -43,7 +55,7 @@ public class JobWithCompanyDTO {
         return minSalary;
     }
 
-    public JobWithCompanyDTO setMinSalary(String minSalary) {
+    public JobDTO setMinSalary(String minSalary) {
         this.minSalary = minSalary;
         return this;
     }
@@ -52,7 +64,7 @@ public class JobWithCompanyDTO {
         return maxSalary;
     }
 
-    public JobWithCompanyDTO setMaxSalary(String maxSalary) {
+    public JobDTO setMaxSalary(String maxSalary) {
         this.maxSalary = maxSalary;
         return this;
     }
@@ -61,7 +73,7 @@ public class JobWithCompanyDTO {
         return location;
     }
 
-    public JobWithCompanyDTO setLocation(String location) {
+    public JobDTO setLocation(String location) {
         this.location = location;
         return this;
     }
@@ -70,7 +82,7 @@ public class JobWithCompanyDTO {
         return company;
     }
 
-    public JobWithCompanyDTO setCompany(Company company) {
+    public JobDTO setCompany(Company company) {
         this.company = company;
         return this;
     }
