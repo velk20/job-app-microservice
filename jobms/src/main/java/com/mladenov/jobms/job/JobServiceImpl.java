@@ -1,13 +1,12 @@
 package com.mladenov.jobms.job;
 
+import com.mladenov.jobms.job.clients.CompanyClient;
+import com.mladenov.jobms.job.clients.ReviewClient;
 import com.mladenov.jobms.job.dto.JobDTO;
 import com.mladenov.jobms.job.external.Company;
 import com.mladenov.jobms.job.external.Review;
 import com.mladenov.jobms.job.mapper.JobMapper;
 
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,10 +17,14 @@ import java.util.List;
 public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
     private final RestTemplate restTemplate;
+    private final CompanyClient companyClient;
+    private final ReviewClient reviewClient;
 
-    public JobServiceImpl(JobRepository jobRepository, RestTemplate restTemplate) {
+    public JobServiceImpl(JobRepository jobRepository, RestTemplate restTemplate, CompanyClient companyClient, ReviewClient reviewClient) {
         this.jobRepository = jobRepository;
         this.restTemplate = restTemplate;
+        this.companyClient = companyClient;
+        this.reviewClient = reviewClient;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class JobServiceImpl implements JobService {
         List<Job> jobs = jobRepository.findAll();
         for (Job job : jobs) {
             Company company = getCompany(job);
-            List<Review> review = getReview(company);
+            List<Review> review = getReviews(company);
             result.add(JobMapper.mapJobToDTO(job, company, review));
         }
 
@@ -48,7 +51,7 @@ public class JobServiceImpl implements JobService {
         Job job = jobRepository.findById(id).orElse(null);
         if (job != null){
             Company company = getCompany(job);
-            List<Review> review = getReview(company);
+            List<Review> review = getReviews(company);
 
             return JobMapper.mapJobToDTO(job, company, review);
         }
@@ -82,25 +85,36 @@ public class JobServiceImpl implements JobService {
 
         Job saved = jobRepository.save(job1);
         Company company = getCompany(saved);
-        List<Review> review = getReview(company);
+        List<Review> review = getReviews(company);
 
         return JobMapper.mapJobToDTO(saved, company, review);
     }
 
     private Company getCompany(Job job) {
-        return restTemplate.getForObject("http://COMPANY-SERVICE:8081/companies/" + job.getCompanyId(), Company.class);
+        return companyClient.getCompany(job.getCompanyId());
     }
 
-
-    private List<Review> getReview(Company company) {
-        //exchange is used when we return List<?>
-        ResponseEntity<List<Review>> reviews = restTemplate.exchange(
-                "http://REVIEW-SERVICE:8083/reviews?companyId=" + company.getId(),
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<Review>>() {
-                });
-
-        return reviews.getBody();
+    private List<Review> getReviews(Company company) {
+        return reviewClient.getReviews(company.getId());
     }
+
+    /**
+     * OLD Rest Template way of communication to other services
+     */
+//    private Company getCompany(Job job) {
+//        return restTemplate.getForObject("http://COMPANY-SERVICE:8081/companies/" + job.getCompanyId(), Company.class);
+//    }
+//
+//
+//    private List<Review> getReview(Company company) {
+//        //exchange is used when we return List<?>
+//        ResponseEntity<List<Review>> reviews = restTemplate.exchange(
+//                "http://REVIEW-SERVICE:8083/reviews?companyId=" + company.getId(),
+//                HttpMethod.GET,
+//                null,
+//                new ParameterizedTypeReference<List<Review>>() {
+//                });
+//
+//        return reviews.getBody();
+//    }
 }
