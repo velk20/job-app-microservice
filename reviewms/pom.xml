@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-micrometer</artifactId>
-		</dependency>up
+		</dependency>
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
