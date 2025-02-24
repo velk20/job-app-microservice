@@ -66,6 +66,13 @@
 			<groupId>io.github.openfeign</groupId>
 			<artifactId>feign-micrometer</artifactId>
 		</dependency>
+<!--		In order to fetch the config from the config server-->
+<!--		we need this dependency to specify that this project-->
+<!--		will be used as client for config server-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.postgresql</groupId>
