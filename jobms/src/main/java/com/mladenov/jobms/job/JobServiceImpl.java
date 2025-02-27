@@ -13,6 +13,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+
 @Service
 public class JobServiceImpl implements JobService {
     private final JobRepository jobRepository;
@@ -28,6 +32,9 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+//    @CircuitBreaker(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+//    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+//    @RateLimiter(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
     public List<JobDTO> findAll() {
         List<JobDTO> result = new ArrayList<>();
 
@@ -38,6 +45,12 @@ public class JobServiceImpl implements JobService {
             result.add(JobMapper.mapJobToDTO(job, company, review));
         }
 
+        return result;
+    }
+
+    public List<String> companyBreakerFallback(Exception ex) {
+        List<String> result = new ArrayList<>();
+        result.add("Dummy");
         return result;
     }
 
