@@ -32,6 +32,15 @@ public class ReviewController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    //Using RabbitMQ from company service
+    @GetMapping("/averageRating")
+    public ResponseEntity<Double> getAverageRating(@RequestParam Long companyId) {
+        List<Review> allReviews = reviewService.getAllReviews(companyId);
+        double averageRating = allReviews.stream().mapToDouble(Review::getRating).average().orElse(0.0);
+
+        return new ResponseEntity<>(averageRating, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<String> addReview(@RequestParam Long companyId, @RequestBody Review review) {
         if (reviewService.addReview(companyId, review))

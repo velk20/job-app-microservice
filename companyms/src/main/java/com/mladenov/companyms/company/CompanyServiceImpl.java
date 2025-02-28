@@ -4,14 +4,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import com.mladenov.companyms.company.clients.ReviewClient;
 import com.mladenov.companyms.company.dto.ReviewMessage;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
+    private final ReviewClient reviewClient;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository) {
+    public CompanyServiceImpl(CompanyRepository companyRepository, ReviewClient reviewClient) {
         this.companyRepository = companyRepository;
+        this.reviewClient = reviewClient;
     }
 
     @Override
@@ -52,7 +55,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public void updateCompanyRating(ReviewMessage reviewMessage) {
-        System.out.println(reviewMessage.getDescription());
+        Company company = getCompanyById(reviewMessage.getCompanyId());
+        if (company != null) {
+            Double averageRating = reviewClient.getAverageRating(reviewMessage.getCompanyId());
+            company.setRating(averageRating);
+            companyRepository.save(company);
+        }
     }
 
 }
