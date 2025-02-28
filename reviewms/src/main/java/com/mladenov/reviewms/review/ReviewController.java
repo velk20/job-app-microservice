@@ -6,14 +6,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import com.mladenov.reviewms.review.messaging.ReviewMessageProducer;
+
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
+    private final ReviewMessageProducer reviewMessageProducer;
 
-
-    public ReviewController(ReviewService reviewService) {
+    public ReviewController(ReviewService reviewService, ReviewMessageProducer reviewMessageProducer) {
         this.reviewService = reviewService;
+        this.reviewMessageProducer = reviewMessageProducer;
     }
 
     @GetMapping
@@ -31,9 +34,12 @@ public class ReviewController {
 
     @PostMapping
     public ResponseEntity<String> addReview(@RequestParam Long companyId, @RequestBody Review review) {
-        return reviewService.addReview(companyId, review) ?
-                new ResponseEntity<>("Review created", HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (reviewService.addReview(companyId, review))
+        {
+            reviewMessageProducer.sendMessage(review);
+            return new ResponseEntity<>("Review created", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
